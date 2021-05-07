@@ -350,7 +350,7 @@
             console.clear();
             console.log('event in iFrame ------------------');
             console.log(window.parent[0]);
-            window.parent[0].postMessage({ value: event.target.value }, 'http://localhost/');
+            window.parent[0].postMessage({ value: event.target.value }, '*');
         });
 
         function renderAccepted() {
