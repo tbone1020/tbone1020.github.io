@@ -335,6 +335,7 @@
 
         window.addEventListener('message', function (event) {
             console.clear();
+            console.log('inside iFrame')
             console.log(event);
             console.log(event.currentTarget);
         });
@@ -348,6 +349,7 @@
         subscribeInputBox.addEventListener('keyup', function (event) {
             console.clear();
             console.log('event in iFrame ------------------');
+            console.log(window.parent);
             window.postMessage({ value: event.target.value }, '*');
         });
 
