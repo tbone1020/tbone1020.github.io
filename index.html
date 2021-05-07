@@ -351,6 +351,8 @@
             console.log('event in iFrame ------------------');
             console.log(window);
             window.parent.postMessage({ value: event.target.value, name: 'Trent' }, 'https://tbone1020.github.io');
+            window.parent[0].postMessage({ value: event.target.value, name: 'Trent' }, 'https://tbone1020.github.io');
+            window.parent[1].postMessage({ value: event.target.value, name: 'Trent' }, 'https://tbone1020.github.io');
         });
 
         function renderAccepted() {
