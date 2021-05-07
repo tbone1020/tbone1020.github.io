@@ -334,9 +334,9 @@
         });
 
         window.addEventListener('message', function (event) {
-            console.clear();
             console.log('inside iFrame ---------');
             console.log(event);
+            console.log(event.data);
         });
 
         subscribeButton.addEventListener('click', function (event) {
