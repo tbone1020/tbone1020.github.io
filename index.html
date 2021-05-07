@@ -334,8 +334,9 @@
         });
 
         window.addEventListener('message', function (event) {
-            /*console.clear();
-            console.log('inside iFrame')
+            console.clear();
+            console.log(event);
+            /*console.log('inside iFrame')
             console.log(event);
             console.log(event.currentTarget);*/
         });
@@ -351,8 +352,6 @@
             console.log('event in iFrame ------------------');
             console.log(window);
             window.parent.postMessage({ value: event.target.value, from: 'window.parent' }, '*');
-            window.parent[0].postMessage({ value: event.target.value, from: 'window.parent[0]' }, '*');
-            window.parent[1].postMessage({ value: event.target.value, from: 'window.parent[1]' }, '*');
         });
 
         function renderAccepted() {
