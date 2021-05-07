@@ -350,12 +350,9 @@
             console.clear();
             console.log('event in iFrame ------------------');
             console.log(window);
-            console.log('window.parent.postMessage ------------------');
-            window.parent.postMessage({ value: event.target.value, name: 'Trent' }, '*');
-            console.log('window.parent[0] ------------------');
-            window.parent[0].postMessage({ value: event.target.value, name: 'Trent' }, '*');
-            console.log('window.parent[1] ------------------');
-            window.parent[1].postMessage({ value: event.target.value, name: 'Trent' }, '*');
+            window.parent.postMessage({ value: event.target.value, from: 'window.parent' }, '*');
+            window.parent[0].postMessage({ value: event.target.value, from: 'window.parent[0]' }, '*');
+            window.parent[1].postMessage({ value: event.target.value, from: 'window.parent[1]' }, '*');
         });
 
         function renderAccepted() {
