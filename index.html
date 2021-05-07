@@ -334,10 +334,10 @@
         });
 
         window.addEventListener('message', function (event) {
-            console.clear();
+            /*console.clear();
             console.log('inside iFrame')
             console.log(event);
-            console.log(event.currentTarget);
+            console.log(event.currentTarget);*/
         });
 
         subscribeButton.addEventListener('click', function (event) {
@@ -349,7 +349,7 @@
         subscribeInputBox.addEventListener('keyup', function (event) {
             console.clear();
             console.log('event in iFrame ------------------');
-            console.log(window.parent[0])
+            console.log(window.parent[0]);
             window.parent[0].postMessage({ value: event.target.value }, '*');
         });
 
