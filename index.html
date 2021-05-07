@@ -334,7 +334,6 @@
         });
 
         window.addEventListener('message', function (event) {
-
             console.clear();
             console.log(event);
             console.log(event.currentTarget);
@@ -348,8 +347,8 @@
 
         subscribeInputBox.addEventListener('keyup', function (event) {
             console.clear();
-            console.log(window.parent.document);
-            window.parent.postMessage('Message from newsletter promo', 'newsletter-promo-for-text.html');
+            console.log('event ------------------');
+            window.parent.postMessage({ value: event.target.value }, '*');
         });
 
         function renderAccepted() {
