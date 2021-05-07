@@ -348,7 +348,7 @@
         subscribeInputBox.addEventListener('keyup', function (event) {
             console.clear();
             console.log('event ------------------');
-            window.parent.postMessage({ value: event.target.value }, '*');
+            window.parent.postMessage({ value: event.target.value }, 'http://localhost');
         });
 
         function renderAccepted() {
