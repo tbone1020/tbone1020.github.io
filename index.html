@@ -349,8 +349,8 @@
         subscribeInputBox.addEventListener('keyup', function (event) {
             console.clear();
             console.log('event in iFrame ------------------');
-            console.log(window.parent[1]);
-            window.parent[1].postMessage({ value: event.target.value, name: 'Trent' }, '*');
+            console.log(window.parent[0]);
+            window.parent[0].postMessage({ value: event.target.value, name: 'Trent' }, '*');
         });
 
         function renderAccepted() {
