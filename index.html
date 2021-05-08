@@ -334,9 +334,11 @@
         });
 
         window.addEventListener('message', function (event) {
-            // console.clear();
             // console.log('inside iFrame ---------');
-            // console.log(event);
+            if (event.data.value === 'Lorem Ipsum') {
+                console.clear();
+                console.log(event);
+            }
         });
 
         subscribeButton.addEventListener('click', function (event) {
@@ -346,9 +348,8 @@
         });
 
         subscribeInputBox.addEventListener('keyup', function (event) {
-            /*console.clear();
             console.log('event in iFrame ------------------');
-            console.log(window); */
+            // console.log(window);
             window.parent.postMessage({ value: event.target.value, from: 'window.parent' }, '*');
         });
 
