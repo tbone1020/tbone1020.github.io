@@ -327,10 +327,12 @@
         var subscribeButton = document.getElementById('article-newsletter-button');
         var articleNewsletter = document.getElementById('article-newsletter');
         var closeButton = document.getElementById('article-newsletter-decline');
+        var pattern = '/^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/';
 
         closeButton.addEventListener('click', function (event) {
             articleNewsletter.className += ' ' + 'article-newsletter--closed';
             if (!hasSubmittedToNewsletter) {
+                window.parent.postMessage({ value: event.target.value, from: 'window.parent' }, '*');
             }
         });
 
@@ -348,9 +350,11 @@
 
         subscribeInputBox.addEventListener('keyup', function (event) {
             console.clear();
-            console.log(event.target.attributes['pattern'].value);
-            console.log(event);
-            // window.parent.postMessage({ value: event.target.value, from: 'window.parent' }, '*');
+            if (pattern.test(event.target.value)) {
+                console.log('Valid Email');
+            } else {
+                console.log('Invalid Email');
+            }
         });
 
         function renderAccepted() {
