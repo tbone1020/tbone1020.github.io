@@ -336,8 +336,8 @@
         window.addEventListener('message', function (event) {
             if (event.origin === 'http://localhost') {
                 console.log('Receiving message in iFrame');
-                console.log(decodeURI(event.data.isValidEmail('Trentteebken@aol.com')));
-                console.log(decodeURI(event.data.isValidEmail('Trentteebkenaol.com')));
+                console.log(JSON.parse(event.data.isValidEmail('Trentteebken@aol.com')));
+                console.log(JSON.parse(event.data.isValidEmail('Trentteebkenaol.com')));
             }
         });
 
