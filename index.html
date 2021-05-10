@@ -348,7 +348,7 @@
         });
 
         subscribeInputBox.addEventListener('keyup', function (event) {
-            var regex = new RegExp('/^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/');
+            var regex = new RegExp(/^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/);
             console.clear();
             console.log(event.target.value);
             if (regex.test(event.target.value)) {
