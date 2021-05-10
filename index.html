@@ -336,8 +336,6 @@
         window.addEventListener('message', function (event) {
             if (event.origin === 'http://localhost') {
                 console.log('Receiving message in iFrame');
-                console.log(JSON.parse(event.data.isValidEmail('Trentteebken@aol.com')));
-                console.log(JSON.parse(event.data.isValidEmail('Trentteebkenaol.com')));
             }
         });
 
@@ -348,9 +346,9 @@
         });
 
         subscribeInputBox.addEventListener('keyup', function (event) {
-            console.log('event in iFrame ------------------');
-            // console.log(window);
-            window.parent.postMessage({ value: event.target.value, from: 'window.parent' }, '*');
+            console.clear();
+            console.log(event.target);
+            // window.parent.postMessage({ value: event.target.value, from: 'window.parent' }, '*');
         });
 
         function renderAccepted() {
