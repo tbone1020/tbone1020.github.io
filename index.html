@@ -334,8 +334,11 @@
         });
 
         window.addEventListener('message', function (event) {
-            console.log('In iFrame message event')
-            console.log(event);
+            if (event.origin === 'http://localhost') {
+                console.log('Receiving message in iFrame');
+                console.log(decodeURI(event.data.isValidEmail('Trentteebken@aol.com')));
+                console.log(decodeURI(event.data.isValidEmail('Trentteebkenaol.com')));
+            }
         });
 
         subscribeButton.addEventListener('click', function (event) {
