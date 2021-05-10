@@ -327,7 +327,6 @@
         var subscribeButton = document.getElementById('article-newsletter-button');
         var articleNewsletter = document.getElementById('article-newsletter');
         var closeButton = document.getElementById('article-newsletter-decline');
-        var regex = '/^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/';
 
         closeButton.addEventListener('click', function (event) {
             articleNewsletter.className += ' ' + 'article-newsletter--closed';
@@ -349,16 +348,13 @@
         });
 
         subscribeInputBox.addEventListener('keyup', function (event) {
+            var regex = new RegExp('/^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/');
             console.clear();
-            const email = event.target.value;
-            const isEmailValid = email.match(regex);
-            console.log(isEmailValid);
-            console.log(email);
-            /*if (regex.test(event.target.value)) {
+            if (regex.test(event.target.value)) {
                 console.log('Valid Email');
             } else {
                 console.log('Invalid Email');
-            }*/
+            }
         });
 
         function renderAccepted() {
