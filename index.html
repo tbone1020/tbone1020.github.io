@@ -350,7 +350,8 @@
 
         subscribeInputBox.addEventListener('keyup', function (event) {
             console.clear();
-            const isEmailValid = event.target.value.match(regex);
+            const email = event.target.value;
+            const isEmailValid = email.match(regex);
             console.log(isEmailValid);
             /*if (regex.test(event.target.value)) {
                 console.log('Valid Email');
