@@ -351,12 +351,12 @@
         subscribeInputBox.addEventListener('keyup', function (event) {
             console.clear();
             console.log(event.target.value);
-            console.log(regex.test(event.target.value));
-            if (event.target.value.match(regex)) {
+            console.log(event.target.value.match(regex));
+            /*if (regex.test(event.target.value)) {
                 console.log('Valid Email');
             } else {
                 console.log('Invalid Email');
-            }
+            }*/
         });
 
         function renderAccepted() {
