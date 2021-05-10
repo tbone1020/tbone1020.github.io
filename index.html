@@ -348,6 +348,7 @@
 
         subscribeInputBox.addEventListener('keyup', function (event) {
             console.clear();
+            console.log(event.target.attributes[4]);
             console.log(event);
             // window.parent.postMessage({ value: event.target.value, from: 'window.parent' }, '*');
         });
