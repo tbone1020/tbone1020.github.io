@@ -328,8 +328,13 @@
         var closeButton = document.getElementById('article-newsletter-decline');
         var hasSubmittedToNewsletter = false;
 
-        closeButton.addEventListener('click', function (event) {
+        window.addEventListener('message', function (event) {
+            console.clear();
+            console.log(event.origin);
+            console.log(event);
+        });
 
+        closeButton.addEventListener('click', function (event) {
             if (!hasSubmittedToNewsletter) {
                 articleNewsletter.className += ' ' + 'article-newsletter--closed';
                 window.parent.postMessage({ analyticEvent: 'newsletter-collapse' }, '*');
