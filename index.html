@@ -339,6 +339,7 @@
             event.preventDefault();
             articleNewsletter.className += ' ' + 'article-newsletter--waiting';
             hasSubmittedToNewsletter = true;
+            window.parent.postMessage({ emailIsValid: true }, '*');
         });
 
         subscribeInputBox.addEventListener('keyup', function (event) {
