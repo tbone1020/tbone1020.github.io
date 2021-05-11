@@ -329,20 +329,21 @@
         var hasSubmittedToNewsletter = false;
 
         closeButton.addEventListener('click', function (event) {
-            articleNewsletter.className += ' ' + 'article-newsletter--closed';
-            window.parent.postMessage({ analyticEvent: 'newsletter-collapse' }, '*');
+
+            if (!hasSubmittedToNewsletter) {
+                articleNewsletter.className += ' ' + 'article-newsletter--closed';
+                window.parent.postMessage({ analyticEvent: 'newsletter-collapse' }, '*');
+            }
         });
 
         subscribeButton.addEventListener('click', function (event) {
             event.preventDefault();
-            if (!hasSubmittedToNewsletter) {
-                articleNewsletter.className += ' ' + 'article-newsletter--waiting';
-                hasSubmittedToNewsletter = true;
-                window.parent.postMessage({
-                    analyticEvent: 'newsletter-submitted',
-                    submittedEmail: subscribeInputBox.value,
-                }, '*');
-            }
+            articleNewsletter.className += ' ' + 'article-newsletter--waiting';
+            hasSubmittedToNewsletter = true;
+            window.parent.postMessage({
+                analyticEvent: 'newsletter-submitted',
+                submittedEmail: subscribeInputBox.value,
+            }, '*');
         });
 
         subscribeInputBox.addEventListener('keyup', function (event) {
