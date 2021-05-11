@@ -348,7 +348,9 @@
         });
 
         subscribeInputBox.addEventListener('keyup', function (event) {
-            var regex = new RegExp(/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/);
+
+            console.clear();
+            var regex = new RegExp(/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,})$/);
             if (regex.test(event.target.value)) {
                 console.log('Valid Email');
             } else {
