@@ -322,24 +322,24 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"
         integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
     <script type="text/javascript">
-        var hasSubmittedToNewsletter = false;
         var subscribeInputBox = document.getElementById('article-newsletter-input');
         var subscribeButton = document.getElementById('article-newsletter-button');
         var articleNewsletter = document.getElementById('article-newsletter');
         var closeButton = document.getElementById('article-newsletter-decline');
+        var hasSubmittedToNewsletter = false;
 
         closeButton.addEventListener('click', function (event) {
             articleNewsletter.className += ' ' + 'article-newsletter--closed';
-            if (!hasSubmittedToNewsletter) {
-                window.parent.postMessage({ analyticEvent: 'newsletter-collapse' }, '*');
-            }
+            window.parent.postMessage({ analyticEvent: 'newsletter-collapse' }, '*');
         });
 
         subscribeButton.addEventListener('click', function (event) {
             event.preventDefault();
-            articleNewsletter.className += ' ' + 'article-newsletter--waiting';
-            hasSubmittedToNewsletter = true;
-            window.parent.postMessage({ analyticEvent: 'newsletter-submitted' }, '*');
+            if (!hasSubmittedToNewsletter) {
+                articleNewsletter.className += ' ' + 'article-newsletter--waiting';
+                hasSubmittedToNewsletter = true;
+                window.parent.postMessage({ analyticEvent: 'newsletter-submitted' }, '*');
+            }
         });
 
         subscribeInputBox.addEventListener('keyup', function (event) {
