@@ -334,6 +334,11 @@
                 console.log('messaged recieved -------');
                 console.log(event.origin);
                 console.log(event);
+                if (event.data.newsletterWasSuccessful) {
+                    renderAccepted();
+                } else {
+                    renderReject();
+                }
             }
         });
 
@@ -360,11 +365,13 @@
         });
 
         function renderAccepted() {
+            console.log('Rendering success message');
             $('#article-newsletter-message').html('<p class="article-newsletter__accepted">Thank you! You have successfully signed up.</p>').css({ 'display': 'block' });
             articleNewsletter.classList.remove('article-newsletter--waiting');
         }
 
         function renderReject() {
+            console.log('Rendering failed message');
             $('#article-newsletter-message').html('<p class="article-newsletter__rejected">Sorry, there was a problem.</p>').css({ 'display': 'block' });
             articleNewsletter.classList.remove('article-newsletter--waiting');
         }
