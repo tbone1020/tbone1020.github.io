@@ -338,7 +338,10 @@
             if (!hasSubmittedToNewsletter) {
                 articleNewsletter.className += ' ' + 'article-newsletter--waiting';
                 hasSubmittedToNewsletter = true;
-                window.parent.postMessage({ analyticEvent: 'newsletter-submitted' }, '*');
+                window.parent.postMessage({
+                    analyticEvent: 'newsletter-submitted',
+                    submittedEmail: subscribeInputBox.value,
+                }, '*');
             }
         });
 
