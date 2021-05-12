@@ -305,8 +305,8 @@
                         <input required value="" id="article-newsletter-input" class="article-newsletter__input"
                             pattern="/^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/" type="email"
                             placeholder="Email Address" name="email" autocomplete="off"><button
-                            id="article-newsletter-button" class="article-newsletter__button btn-light"
-                            disabled>SUBSCRIBE</button>
+                            id="article-newsletter-button"
+                            class="article-newsletter__button btn-light">SUBSCRIBE</button>
                     </form>
                     <div id="article-newsletter-decline" class="article-newsletter__decline">
                         <span>MAYBE LATER</span>
@@ -357,10 +357,10 @@
             }, '*');
         });
 
-        subscribeInputBox.addEventListener('keyup', function (event) {
+        /*subscribeInputBox.addEventListener('keyup', function (event) {
             var regex = new RegExp(/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,})$/);
             subscribeButton.disabled = regex.test(event.target.value) ? false : true;
-        });
+        }); */
 
         function renderAccepted() {
             console.log('Rendering success message');
