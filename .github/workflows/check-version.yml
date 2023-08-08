@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     steps: 
       - name: Check package.json
-        run: versionFoo="$(jq -r '.version' package.json)" && echo "$versionFoo"
+        run: echo "Checking package.json"
   check-composer-version:
     runs-on: ubuntu-latest
     steps: 
