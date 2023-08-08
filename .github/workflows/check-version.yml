@@ -8,16 +8,18 @@ on:
       - master
 
 jobs:
-  runs-on: ubuntu-latest
   check-package-version:
+    runs-on: ubuntu-latest
     steps: 
       - name: Check package.json
         run: versionFoo="$(jq -r '.version' package.json)" && echo "$versionFoo"
   check-composer-version:
+    runs-on: ubuntu-latest
     steps: 
       - name: Check composer.json
         run: echo "Checking composer.json"
   check-composer.lock-version:
+    runs-on: ubuntu-latest
     steps: 
       - name: Check composer-lock.json
         run: echo "Checking composer-lock.json"
