@@ -1,0 +1,25 @@
+# Check if the correct versions were 
+# updated and stop the deployment if not
+name: check-for-updated-versions
+
+on: 
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  check-package-version:
+    runs-on: ubuntu-latest
+    steps: 
+      - name: Check package.json
+        run: echo "Checking package.json"
+  check-composer-version:
+    runs-on: ubuntu-latest
+    steps: 
+      - name: Check composer.json
+        run: echo "Checking composer.json"
+  check-composer-lock-version:
+    runs-on: ubuntu-latest
+    steps: 
+      - name: Check composer-lock.json
+        run: echo "Checking composer-lock.json"
