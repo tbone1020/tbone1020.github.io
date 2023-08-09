@@ -15,7 +15,7 @@ jobs:
         uses: actions/checkout@v3
         with:
           repository: ${{ github.repository }}
-      - name: Check composer.json
-        run: versionFoo="$(jq -r '.version' package.json)" && echo "$versionFoo"
-      - name: Check composer-lock.json
-        run: echo "Checking composer-lock.json"
+      - name: Check versions
+        run: | 
+          [ -f package.json ] && packageVersion="$(jq -r '.version' package.json)" && echo "package $packageVersion"
+          [ -f composer.json ] && composerVersion="$(jq -r '.version' composer.json)" && echo "composer $composerVersion"
