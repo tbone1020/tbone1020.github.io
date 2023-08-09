@@ -7,6 +7,7 @@ on:
     branches:
       - master
 
+
 jobs:
   check-package-version:
     runs-on: ubuntu-latest
@@ -41,6 +42,11 @@ jobs:
           repository: ${{ github.repository }}
       - name: Check versions
         run: |
-          ls -l
-          [ -f package.json ] && packageVersion="$(jq -r '.version' package.json)" && echo "package $packageVersion"
-          [ -f composer.json ] && composerVersion="$(jq -r '.version' composer.json)" && echo "composer $composerVersion"
+          if [ -f package.json ] then; 
+            packageVersion="$(jq -r '.version' package.json)"
+            echo "package $packageVersion"
+          fi
+          if [ -f composer.json ] then; 
+            composerVersion="$(jq -r '.version' composer.json)" 
+            echo "composer $composerVersion"
+          fi
