@@ -26,6 +26,6 @@ jobs:
             echo "$composerVersion"
           fi
           if [ -f composer.lock ]; then
-            composerLockHash="$(jq -r '.content-hash' composer.lock)"
+            composerLockHash="$(jq -r '."content-hash"' composer.lock)"
             echo "$composerLockHash"
           fi

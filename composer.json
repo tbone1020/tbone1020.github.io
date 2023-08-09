@@ -1,0 +1,27 @@
+{
+    "name": "tbone/web",
+    "version": "3.8.3",
+    "description": ".",
+    "type": "project",
+    "license": "proprietary",
+    "repositories": [
+      {
+        "type": "composer",
+        "url": "https://repo.packagist.com/"
+      },
+      {
+        "packagist.org": false
+      }
+    ],
+    "require": {
+      "php": ">=8.1",
+      "symfony/asset": "^5.3|^6.0"
+    },
+    "require-dev": {},
+    "autoload": {},
+    "autoload-dev": {},
+    "scripts": {
+      "test": "vendor/bin/phpunit"
+    }
+  }
+  
