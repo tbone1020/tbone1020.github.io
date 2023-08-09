@@ -16,6 +16,7 @@ jobs:
         with:
           repository: ${{ github.repository }}
       - name: Check versions
-        run: | 
+        run: |
+          ls -l
           [ -f package.json ] && packageVersion="$(jq -r '.version' package.json)" && echo "package $packageVersion"
           [ -f composer.json ] && composerVersion="$(jq -r '.version' composer.json)" && echo "composer $composerVersion"
