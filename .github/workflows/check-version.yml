@@ -7,7 +7,6 @@ on:
     branches:
       - master
 
-
 jobs:
   check-package-version:
     runs-on: ubuntu-latest
@@ -20,9 +19,13 @@ jobs:
         run: |
           if [ -f package.json ]; then
             packageVersion="$(jq -r '.version' package.json)"
-            echo "package $packageVersion"
+            echo "$packageVersion"
           fi
           if [ -f composer.json ]; then
             composerVersion="$(jq -r '.version' composer.json)"
-            echo "composer $composerVersion"
+            echo "$composerVersion"
+          fi
+          if [ -f composer.lock ]; then
+            composerLockHash="$(jq -r '.content-hash' composer.lock)"
+            echo "$composerLockHash"
           fi
