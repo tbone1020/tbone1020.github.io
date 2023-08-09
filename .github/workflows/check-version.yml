@@ -10,10 +10,12 @@ on:
 jobs:
   check-package-version:
     runs-on: ubuntu-latest
-    steps: 
-      - name: Check package.json
-        run: versionFoo="$(jq -r '.version?' package.json)" && echo "$versionFoo"
+    steps:
+      - name: checkout repo
+        uses: actions/checkout@v3
+        with:
+          repository: ${{ github.repository }}
       - name: Check composer.json
-        run: echo "Checking composer.json"
+        run: versionFoo="$(jq -r '.version' package.json)" && echo "$versionFoo"
       - name: Check composer-lock.json
         run: echo "Checking composer-lock.json"
