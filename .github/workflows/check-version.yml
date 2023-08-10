@@ -11,37 +11,39 @@ jobs:
   check-package-version:
     runs-on: ubuntu-latest
     steps:
-      - name: checkout master repo
+      - name: Checkout the master repo
         uses: actions/checkout@v3
         with:
           repository: ${{ github.repository }}
           ref: master
-      - name: Get Master Variables
+      - name: Get the master package versions and hash
         run: |
           if [ -f package.json ]; then
-            echo masterPackageVersion="$(jq -r '.version' package.json)" >> "$GITHUB_ENV"
+            echo masterPackageVersion="$(jq -r '.version' package.json)" | sed 's/\.//g' >> "$GITHUB_ENV"
           fi
           if [ -f composer.json ]; then
-            echo masterComposerVersion="$(jq -r '.version' composer.json)" >> "$GITHUB_ENV"
+            echo masterComposerVersion="$(jq -r '.version' composer.json)" | sed 's/\.//g' >> "$GITHUB_ENV"
           fi
           if [ -f composer.lock ]; then
             echo masterComposerLockHash="$(jq -r '."content-hash"' composer.lock)" >> "$GITHUB_ENV"
           fi
-      - name: checkout current repo
+      - name: Checkout the current repo
         uses: actions/checkout@v3
         with:
           repository: ${{ github.repository }}
-      - name: Check versions
+      - name: Compare the current versions with the masters versions
         run: |
           if [ -f package.json ]; then
             packageVersion="$(jq -r '.version' package.json)"
-            echo "master: $masterPackageVersion,  $packageVersion" | sed 's/\.//g'
+            echo "master: $masterPackageVersion,  $packageVersion"
           fi
           if [ -f composer.json ]; then
             composerVersion="$(jq -r '.version' composer.json)"
-            echo "master: $masterComposerVersion,  $composerVersion" | sed 's/\.//g'
+            echo "master: $masterComposerVersion,  $composerVersion"
           fi
           if [ -f composer.lock ]; then
             composerLockHash="$(jq -r '."content-hash"' composer.lock)"
-           echo "master: $masterComposerLockHash, $composerLockHash" | sed 's/\.//g'
+            if [ "$masterComposerLockHash" == "$composerLockHash" ]; then
+              exit 1
+            fi
           fi
