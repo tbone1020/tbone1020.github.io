@@ -9,15 +9,31 @@ on:
 
 jobs:
   check-package-version:
-    env: 
-      MASTER_VERSION: '1.1.0'
     runs-on: ubuntu-latest
     steps:
-      - name: checkout repo
+      - name: checkout master repo
         uses: actions/checkout@v3
         with:
           repository: ${{ github.repository }}
           ref: master
+      - name: Grab master variables
+        run: |
+          if [ -f package.json ]; then
+            packageVersion="$(jq -r '.version' package.json)"
+            echo "$packageVersion"
+          fi
+          if [ -f composer.json ]; then
+            composerVersion="$(jq -r '.version' composer.json)"
+            echo "$composerVersion"
+          fi
+          if [ -f composer.lock ]; then
+            composerLockHash="$(jq -r '."content-hash"' composer.lock)"
+            echo "$composerLockHash"
+          fi
+        env:
+          MASTER_PACKAGE_VERSION: "$packageVersion"
+          MASTER_COMPOSER_VERSION: "$composerVersion"
+          MASTER_COMPOSER_HASH: "$composerLockHash"
       - name: checkout repo
         uses: actions/checkout@v3
         with:
@@ -26,13 +42,13 @@ jobs:
         run: |
           if [ -f package.json ]; then
             packageVersion="$(jq -r '.version' package.json)"
-            echo "$packageVersion master: $MASTER_VERSION"
+            echo "$packageVersion master: $MASTER_PACKAGE_VERSION"
           fi
           if [ -f composer.json ]; then
             composerVersion="$(jq -r '.version' composer.json)"
-            echo "$composerVersion master: $MASTER_VERSION"
+            echo "$composerVersion master: $MASTER_COMPOSER_VERSION"
           fi
           if [ -f composer.lock ]; then
             composerLockHash="$(jq -r '."content-hash"' composer.lock)"
-            echo "$composerLockHash master: $MASTER_VERSION"
+            echo "$composerLockHash master: $MASTER_COMPOSER_HASH"
           fi
