@@ -9,25 +9,30 @@ on:
 
 jobs:
   check-package-version:
+    env: 
+      MASTER_VERSION: '1.1.0'
     runs-on: ubuntu-latest
     steps:
       - name: checkout repo
         uses: actions/checkout@v3
         with:
           repository: ${{ github.repository }}
-        run: |
-          masterVersions="1.33.0"
+          ref: master
+      - name: checkout repo
+        uses: actions/checkout@v3
+        with:
+          repository: ${{ github.repository }}
       - name: Check versions
         run: |
           if [ -f package.json ]; then
             packageVersion="$(jq -r '.version' package.json)"
-            echo "$packageVersion master: $masterVersions"
+            echo "$packageVersion master: $MASTER_VERSION"
           fi
           if [ -f composer.json ]; then
             composerVersion="$(jq -r '.version' composer.json)"
-            echo "$composerVersion master: $masterVersions"
+            echo "$composerVersion master: $MASTER_VERSION"
           fi
           if [ -f composer.lock ]; then
             composerLockHash="$(jq -r '."content-hash"' composer.lock)"
-            echo "$composerLockHash master: $masterVersions"
+            echo "$composerLockHash master: $MASTER_VERSION"
           fi
