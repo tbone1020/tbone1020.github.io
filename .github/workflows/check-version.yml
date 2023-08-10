@@ -19,22 +19,14 @@ jobs:
       - name: Get Master Variables
         run: |
           if [ -f package.json ]; then
-            masterPackageVersion="$(jq -r '.version' package.json)"
-            echo "$masterPackageVersion"
+            masterPackageVersion="$(jq -r '.version' package.json)" >> "$GITHUB_ENV"
           fi
           if [ -f composer.json ]; then
-            masterComposerVersion="$(jq -r '.version' composer.json)"
-            echo "$masterComposerVersion"
+            masterComposerVersion="$(jq -r '.version' composer.json)" >> "$GITHUB_ENV"
           fi
           if [ -f composer.lock ]; then
-            masterComposerLockHash="$(jq -r '."content-hash"' composer.lock)"
-            echo "$masterComposerLockHash"
+            masterComposerLockHash="$(jq -r '."content-hash"' composer.lock)" >> "$GITHUB_ENV"
           fi
-      - name: Assign Vars
-        env:
-          MASTER_PACKAGE_VERSION: "$masterPackageVersion"
-          MASTER_COMPOSER_VERSION: "$masterComposerVersion"
-          MASTER_COMPOSER_HASH: "$masterComposerLockHash"
       - name: checkout current repo
         uses: actions/checkout@v3
         with:
@@ -43,13 +35,13 @@ jobs:
         run: |
           if [ -f package.json ]; then
             packageVersion="$(jq -r '.version' package.json)"
-            echo "$packageVersion master: $MASTER_PACKAGE_VERSION"
+            echo "master: $masterPackageVersion,  $packageVersion" | sed 's/\.//g'
           fi
           if [ -f composer.json ]; then
             composerVersion="$(jq -r '.version' composer.json)"
-            echo "$composerVersion master: $MASTER_COMPOSER_VERSION"
+            echo "master: $masterComposerVersion,  $composerVersion" | sed 's/\.//g'
           fi
           if [ -f composer.lock ]; then
             composerLockHash="$(jq -r '."content-hash"' composer.lock)"
-            echo "$composerLockHash master: $MASTER_COMPOSER_HASH"
+           echo "master: $masterComposerLockHash, $composerLockHash" | sed 's/\.//g'
           fi
