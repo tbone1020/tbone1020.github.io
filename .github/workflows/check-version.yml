@@ -19,13 +19,13 @@ jobs:
       - name: Get Master Variables
         run: |
           if [ -f package.json ]; then
-            masterPackageVersion="$(jq -r '.version' package.json)" >> "$GITHUB_ENV"
+            echo masterPackageVersion="$(jq -r '.version' package.json)" >> "$GITHUB_ENV"
           fi
           if [ -f composer.json ]; then
-            masterComposerVersion="$(jq -r '.version' composer.json)" >> "$GITHUB_ENV"
+            echo masterComposerVersion="$(jq -r '.version' composer.json)" >> "$GITHUB_ENV"
           fi
           if [ -f composer.lock ]; then
-            masterComposerLockHash="$(jq -r '."content-hash"' composer.lock)" >> "$GITHUB_ENV"
+            echo masterComposerLockHash="$(jq -r '."content-hash"' composer.lock)" >> "$GITHUB_ENV"
           fi
       - name: checkout current repo
         uses: actions/checkout@v3
