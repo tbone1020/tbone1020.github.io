@@ -16,25 +16,26 @@ jobs:
         with:
           repository: ${{ github.repository }}
           ref: master
-      - name: Grab master variables
+      - name: Get Master Variables
         run: |
           if [ -f package.json ]; then
-            packageVersion="$(jq -r '.version' package.json)"
-            echo "$packageVersion"
+            masterPackageVersion="$(jq -r '.version' package.json)"
+            echo "$masterPackageVersion"
           fi
           if [ -f composer.json ]; then
-            composerVersion="$(jq -r '.version' composer.json)"
-            echo "$composerVersion"
+            masterComposerVersion="$(jq -r '.version' composer.json)"
+            echo "$masterComposerVersion"
           fi
           if [ -f composer.lock ]; then
-            composerLockHash="$(jq -r '."content-hash"' composer.lock)"
-            echo "$composerLockHash"
+            masterComposerLockHash="$(jq -r '."content-hash"' composer.lock)"
+            echo "$masterComposerLockHash"
           fi
+      - name: Assign Vars
         env:
-          MASTER_PACKAGE_VERSION: "$packageVersion"
-          MASTER_COMPOSER_VERSION: "$composerVersion"
-          MASTER_COMPOSER_HASH: "$composerLockHash"
-      - name: checkout repo
+          MASTER_PACKAGE_VERSION: "$masterPackageVersion"
+          MASTER_COMPOSER_VERSION: "$masterComposerVersion"
+          MASTER_COMPOSER_HASH: "$masterComposerLockHash"
+      - name: checkout current repo
         uses: actions/checkout@v3
         with:
           repository: ${{ github.repository }}
