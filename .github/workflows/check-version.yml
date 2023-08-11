@@ -35,15 +35,18 @@ jobs:
         run: |
           if [ -f package.json ]; then
             packageVersion="$(jq -r '.version | split(".") | join("") | tonumber' package.json)"
-            echo "current: $packageVersion master: $masterPackageVersion"
+            if [ $packageVersion <= $masterPackageVersion ]; then 
+              exit 1
+            fi
           fi
           if [ -f composer.json ]; then
             composerVersion="$(jq -r '.version | split(".") | join("") | tonumber' composer.json)"
-            echo "current: $composerVersion master: $masterComposerVersion"
+            if [ $composerVersion <= $masterComposerVersion ]; then 
+              exit 1
+            fi
           fi
           if [ -f composer.lock ]; then
             composerLockHash="$(jq -r '."content-hash"' composer.lock)"
-            echo "current: $composerLockHash master: $masterComposerLockHash"
             if [ "$masterComposerLockHash" == "$composerLockHash" ]; then
               exit 1
             fi
