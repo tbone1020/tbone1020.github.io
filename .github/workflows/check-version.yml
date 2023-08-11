@@ -19,10 +19,12 @@ jobs:
       - name: Get the master package versions and hash
         run: |
           if [ -f package.json ]; then
-            echo masterPackageVersion="$(jq -r '.version' package.json)" | sed 's/\.//g' >> "$GITHUB_ENV"
+            echo masterPackageVersion="
+              $(jq -r '.version | split(".") | join("") | tonumber package.json)" >> "$GITHUB_ENV"
           fi
           if [ -f composer.json ]; then
-            echo masterComposerVersion="$(jq -r '.version' composer.json)" | sed 's/\.//g' >> "$GITHUB_ENV"
+            echo masterComposerVersion="
+              $(jq -r '.version | split(".") | join("") | tonumber composer.json)" >> "$GITHUB_ENV"
           fi
           if [ -f composer.lock ]; then
             echo masterComposerLockHash="$(jq -r '."content-hash"' composer.lock)" >> "$GITHUB_ENV"
@@ -34,15 +36,16 @@ jobs:
       - name: Compare the current versions with the masters versions
         run: |
           if [ -f package.json ]; then
-            packageVersion="$(jq -r '.version' package.json)"
-            echo "$packageVersion" | sed 's/\.//g'
+            packageVersion="$(jq -r '.version | split(".") | join("") | tonumber' package.json)"
+            echo "current: $packageVersion master: $masterPackageVersion"
           fi
           if [ -f composer.json ]; then
-            composerVersion="$(jq -r '.version' composer.json)"
-            echo "$composerVersion" | sed 's/\.//g'
+            composerVersion="$(jq -r '.version | split(".") | join("") | tonumber composer.json)"
+            echo "current: $composerVersion master: $masterComposerVersion"
           fi
           if [ -f composer.lock ]; then
             composerLockHash="$(jq -r '."content-hash"' composer.lock)"
+            echo "current: $composerLockHash master: $masterComposerLockHash"
             if [ "$masterComposerLockHash" == "$composerLockHash" ]; then
               exit 1
             fi
