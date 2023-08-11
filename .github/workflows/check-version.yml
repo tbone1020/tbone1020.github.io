@@ -34,11 +34,11 @@ jobs:
       - name: Compare the current versions with the masters versions
         run: |
           if [ -f package.json ]; then
-            packageVersion="$(jq -r '.version' package.json)"
+            packageVersion="$(jq -r '.version' package.json)" | sed 's/\.//g'
             echo "master: $masterPackageVersion,  $packageVersion"
           fi
           if [ -f composer.json ]; then
-            composerVersion="$(jq -r '.version' composer.json)"
+            composerVersion="$(jq -r '.version' composer.json)" | sed 's/\.//g'
             echo "master: $masterComposerVersion,  $composerVersion"
           fi
           if [ -f composer.lock ]; then
