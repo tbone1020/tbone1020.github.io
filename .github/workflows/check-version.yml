@@ -35,11 +35,11 @@ jobs:
         run: |
           if [ -f package.json ]; then
             packageVersion="$(jq -r '.version' package.json)"
-            echo "$packageVersion"
+            echo "$packageVersion" | sed 's/\.//g'
           fi
           if [ -f composer.json ]; then
             composerVersion="$(jq -r '.version' composer.json)"
-            echo "$composerVersion"
+            echo "$composerVersion" | sed 's/\.//g'
           fi
           if [ -f composer.lock ]; then
             composerLockHash="$(jq -r '."content-hash"' composer.lock)"
