@@ -40,6 +40,8 @@ jobs:
         run: |
           if [ -f package.json ]; then
             packageVersion="$(jq -r '.version' package.json)"
+            echo $packageVersion 
+            echo $MASTER_PACKAGE_VERSION
             if [ $packageVersion -eq $MASTER_PACKAGE_VERSION ]; then
               exit 1;
               echo "they are the same"
