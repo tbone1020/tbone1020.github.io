@@ -6,7 +6,12 @@ on:
   pull_request:
     branches:
       - master
-
+# MASTER_PACKAGE_VERSION=1.2.3; 
+# [[ $(cut -d'.' -f1 <<<$MASTER_PACKAGE_VERSION) -lt $(jq -r '.version' ./package.json | cut -d'.' -f1) ]]
+# | split(".") | join("") | tonumber
+# test="$(jq -r '.version' ./package.json)"; echo $test
+# [[ 5 -lt 3 || 15 -lt 10 || 0 -gt 5 ]] && echo 'hello' || echo 'No' 
+# Start with incoming one
 jobs:
   check-package-version:
     runs-on: ubuntu-latest
@@ -19,13 +24,13 @@ jobs:
       - name: Get the master package versions and hash
         run: |
           if [ -f package.json ]; then
-            echo masterPackageVersion="$(jq -r '.version | split(".") | join("") | tonumber' package.json)" >> "$GITHUB_ENV"
+            echo MASTER_PACKAGE_VERSION="$(jq -r '.version' package.json)" >> "$GITHUB_ENV"
           fi
           if [ -f composer.json ]; then
-            echo masterComposerVersion="$(jq -r '.version | split(".") | join("") | tonumber' composer.json)" >> "$GITHUB_ENV"
+            echo MASTER_COMPOSER_VERSION="$(jq -r '.version' composer.json)" >> "$GITHUB_ENV"
           fi
           if [ -f composer.lock ]; then
-            echo masterComposerLockHash="$(jq -r '."content-hash"' composer.lock)" >> "$GITHUB_ENV"
+            echo MASTER_COMPOSER_LOCK_HASH="$(jq -r '."content-hash"' composer.lock)" >> "$GITHUB_ENV"
           fi
       - name: Checkout the current repo
         uses: actions/checkout@v3
@@ -34,20 +39,25 @@ jobs:
       - name: Compare the current versions with the masters versions
         run: |
           if [ -f package.json ]; then
-            packageVersion="$(jq -r '.version | split(".") | join("") | tonumber' package.json)"
-            if [ $packageVersion <= $masterPackageVersion ]; then 
-              exit 1
+            packageVersion="$(jq '.version' package.json)"
+            if [ $packageVersion -eq $MASTER_PACKAGE_VERSION ]; then
+              exit 1;
+              echo "they are the same"
+            else 
+              echo "they are different"
             fi
           fi
           if [ -f composer.json ]; then
-            composerVersion="$(jq -r '.version | split(".") | join("") | tonumber' composer.json)"
-            if [ $composerVersion <= $masterComposerVersion ]; then 
+            composerVersion="$(jq -r '.version' composer.json)"
+            if [ $composerVersion <= $MASTER_COMPOSER_VERSION ]; then 
+              echo "The composer version needs to be updated"
               exit 1
             fi
           fi
           if [ -f composer.lock ]; then
             composerLockHash="$(jq -r '."content-hash"' composer.lock)"
-            if [ "$masterComposerLockHash" == "$composerLockHash" ]; then
+            if [ "$masterComposerLockHash" -eq "$MASTER_COMPOSER_LOCK_HASH" ]; then
+              echo "composer.lock needs to be updated"
               exit 1
             fi
           fi
