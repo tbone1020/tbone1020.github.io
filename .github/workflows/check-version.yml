@@ -43,8 +43,8 @@ jobs:
             echo $packageVersion 
             echo $MASTER_PACKAGE_VERSION
             if [ $packageVersion = $MASTER_PACKAGE_VERSION ]; then
-              exit 1;
               echo "they are the same"
+              exit 1;
             else 
               echo "they are different"
             fi
