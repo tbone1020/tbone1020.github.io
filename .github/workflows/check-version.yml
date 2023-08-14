@@ -39,9 +39,13 @@ jobs:
       - name: Compare the current versions with the masters versions
         run: |
           if [ -f package.json ]; then
-            packageVersion="$(jq '.version' package.json)"
-            echo $packageVersion
-            echo $MASTER_PACKAGE_VERSION
+            packageVersion="$(jq -r '.version' package.json)"
+            if [ $packageVersion -eq $MASTER_PACKAGE_VERSION ]; then
+              exit 1;
+              echo "they are the same"
+            else 
+              echo "they are different"
+            fi
           fi
           if [ -f composer.json ]; then
             composerVersion="$(jq -r '.version' composer.json)"
