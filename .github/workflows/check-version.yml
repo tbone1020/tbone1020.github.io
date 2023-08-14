@@ -42,7 +42,7 @@ jobs:
             packageVersion="$(jq '.version' package.json)"
             echo $packageVersion 
             echo $MASTER_PACKAGE_VERSION
-            if [ $packageVersion != $MASTER_PACKAGE_VERSION ]; then
+            if [ $packageVersion = $MASTER_PACKAGE_VERSION ]; then
               exit 1;
               echo "they are the same"
             else 
