@@ -39,7 +39,7 @@ jobs:
       - name: Compare the current versions with the masters versions
         run: |
           if [ -f package.json ]; then
-            current_major="$(jq '.version | split(".")[0]' package.json)"
+            current_major="$(jq '.version | split(".")[0]|tonumber' package.json)"
             master_major=$(cut -d '.' -f 1 <<<"$MASTER_PACKAGE_VERSION")
             echo $current_major
             echo "$master_major"
