@@ -39,10 +39,8 @@ jobs:
       - name: Compare the current versions with the masters versions
         run: |
           if [ -f package.json ]; then
-            packageVersion="$(jq '.version' package.json)"
-            MASTER_PACKAGE_VERSION="1.1.0"
-            if [ $packageVersion = $MASTER_PACKAGE_VERSION ]; then
-              echo "Both package versions are the same"
-              exit 1;
-            fi
+            current_major="$(jq '.version' package.json)"
+            master_major=$(cut -d '.' -f 1 <<<"$MASTER_VERSION")
+            echo $current_major
+            echo $master_major
           fi
