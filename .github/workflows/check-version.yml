@@ -123,6 +123,6 @@ jobs:
             fi
 
             echo "composer.lock's file needs to be updated"
-            exit 0
+            exit 1
           fi
           
