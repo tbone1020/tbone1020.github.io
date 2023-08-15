@@ -1,5 +1,5 @@
-# Check if the correct versions were 
-# updated and stop the deployment if not
+# Check if the versions were updated
+# and stop the deployment if not
 name: check-for-updated-versions
 
 on: 
@@ -8,7 +8,7 @@ on:
       - master
 
 jobs:
-  check-package-version:
+  compare-versions:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout the master repo
@@ -19,35 +19,105 @@ jobs:
       - name: Get the master package versions and hash
         run: |
           if [ -f package.json ]; then
-            echo masterPackageVersion="$(jq -r '.version | split(".") | join("") | tonumber' package.json)" >> "$GITHUB_ENV"
+            echo MASTER_PACKAGE_VERSION="$(jq -r '.version' package.json)" >> "$GITHUB_ENV"
           fi
           if [ -f composer.json ]; then
-            echo masterComposerVersion="$(jq -r '.version | split(".") | join("") | tonumber' composer.json)" >> "$GITHUB_ENV"
+            echo MASTER_COMPOSER_VERSION="$(jq -r '.version' composer.json)" >> "$GITHUB_ENV"
           fi
           if [ -f composer.lock ]; then
-            echo masterComposerLockHash="$(jq -r '."content-hash"' composer.lock)" >> "$GITHUB_ENV"
+            echo MASTER_COMPOSER_LOCK_HASH="$(jq '."content-hash"' composer.lock)" >> "$GITHUB_ENV"
           fi
       - name: Checkout the current repo
         uses: actions/checkout@v3
         with:
           repository: ${{ github.repository }}
-      - name: Compare the current versions with the masters versions
+      - name: Check package.json versions
         run: |
           if [ -f package.json ]; then
-            packageVersion="$(jq -r '.version | split(".") | join("") | tonumber' package.json)"
-            if [ $packageVersion <= $masterPackageVersion ]; then 
+            current_major="$(jq '.version | split(".")[0]|tonumber' package.json)"
+            master_major=$(cut -d '.' -f 1 <<<"$MASTER_PACKAGE_VERSION")
+            if [ $current_major -lt $master_major ]; then
+              echo "package's major is below the master version"
+              exit 1
+            fi 
+
+            if [ $current_major -gt $master_major ]; then
+              exit 0
+            fi 
+
+            current_minor="$(jq '.version | split(".")[1]|tonumber' package.json)"
+            master_minor=$(cut -d '.' -f 2 <<<"$MASTER_PACKAGE_VERSION")
+            if [ $current_minor -lt $master_minor ]; then
+              echo "package's minor is below the master version"
+              exit 1
+            fi 
+
+            if [ $current_minor -gt $master_minor ]; then
+              exit 0
+            fi 
+
+            current_patch="$(jq '.version | split(".")[2]|tonumber' package.json)"
+            master_patch=$(cut -d '.' -f 3 <<<"$MASTER_PACKAGE_VERSION")
+            if [ $current_patch -lt $master_patch ]; then
+              echo "package's patch is below the master version"
+              exit 1
+            fi 
+
+            if [ $current_patch -gt $master_patch ]; then
               exit 0
             fi
+
+            echo "Package.json needs to be updated"
+            exit 1
           fi
+      - name: Check composer.json versions
+        run: |
           if [ -f composer.json ]; then
-            composerVersion="$(jq -r '.version | split(".") | join("") | tonumber' composer.json)"
-            if [ $composerVersion <= $masterComposerVersion ]; then 
+            current_major="$(jq '.version | split(".")[0]|tonumber' composer.json)"
+            master_major=$(cut -d '.' -f 1 <<<"$MASTER_COMPOSER_VERSION")
+            if [ $current_major -lt $master_major ]; then
+              echo "composer's major is below the master version"
+              exit 1
+            fi 
+
+            if [ $current_major -gt $master_major ]; then
+              exit 0
+            fi 
+
+            current_minor="$(jq '.version | split(".")[1]|tonumber' composer.json)"
+            master_minor=$(cut -d '.' -f 2 <<<"$MASTER_COMPOSER_VERSION")
+            if [ $current_minor -lt $master_minor ]; then
+              echo "composer's minor is below the master version"
+              exit 1
+            fi 
+
+            if [ $current_minor -gt $master_minor ]; then
+              exit 0
+            fi 
+
+            current_patch="$(jq '.version | split(".")[2]|tonumber' composer.json)"
+            master_patch=$(cut -d '.' -f 3 <<<"$MASTER_COMPOSER_VERSION")
+            if [ $current_patch -lt $master_patch ]; then
+              echo "composer's patch is below the master version"
+              exit 1
+            fi 
+
+            if [ $current_patch -gt $master_patch ]; then
               exit 0
             fi
+
+            echo "Composer.json needs to be updated"
+            exit 1
           fi
+      - name: Check composer.lock's hash
+        run: |
           if [ -f composer.lock ]; then
-            composerLockHash="$(jq -r '."content-hash"' composer.lock)"
-            if [ "$masterComposerLockHash" == "$composerLockHash" ]; then
+            current_hash="$(jq '."content-hash"' composer.lock)"
+            if [ $current_hash != $MASTER_COMPOSER_LOCK_HASH ]; then 
               exit 0
             fi
+
+            echo "composer.lock's hash needs to be updated"
+            exit 1
           fi
+          
