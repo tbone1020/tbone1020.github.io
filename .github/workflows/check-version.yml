@@ -8,7 +8,7 @@ on:
       - master
 
 jobs:
-  check-version:
+  compare-versions:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout the master repo
