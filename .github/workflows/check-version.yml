@@ -42,7 +42,7 @@ jobs:
             current_major="$(jq '.version | split(".")[0]|tonumber' package.json)"
             master_major=$(cut -d '.' -f 1 <<<"$MASTER_PACKAGE_VERSION")
             if [ $current_major -lt $master_major ]; then
-              echo "Package version needs to be updated"
+              echo "Package version is below the master version"
               exit 1
             fi 
 
@@ -53,7 +53,7 @@ jobs:
             current_minor="$(jq '.version | split(".")[1]|tonumber' package.json)"
             master_minor=$(cut -d '.' -f 2 <<<"$MASTER_PACKAGE_VERSION")
             if [ $current_minor -lt $master_minor ]; then
-              echo "Package version needs to be updated"
+              echo "Package version is below the master version"
               exit 1
             fi 
 
@@ -64,7 +64,7 @@ jobs:
             current_patch="$(jq '.version | split(".")[2]|tonumber' package.json)"
             master_patch=$(cut -d '.' -f 3 <<<"$MASTER_PACKAGE_VERSION")
             if [ $current_minor -lt $master_minor ]; then
-              echo "Package version needs to be updated"
+              echo "Package version is below the master version"
               exit 1
             fi 
 
