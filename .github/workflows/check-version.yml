@@ -30,7 +30,7 @@ jobs:
             echo MASTER_COMPOSER_VERSION="$(jq -r '.version' composer.json)" >> "$GITHUB_ENV"
           fi
           if [ -f composer.lock ]; then
-            echo MASTER_COMPOSER_LOCK_HASH="$(jq -r '."content-hash"' composer.lock)" >> "$GITHUB_ENV"
+            echo MASTER_COMPOSER_LOCK_HASH="$(jq '."content-hash"' composer.lock)" >> "$GITHUB_ENV"
           fi
       - name: Checkout the current repo
         uses: actions/checkout@v3
@@ -118,8 +118,6 @@ jobs:
         run: |
           if [ -f composer.lock ]; then
             current_hash="$(jq '."content-hash"' composer.lock)"
-            echo $current_hash
-            echo $MASTER_COMPOSER_LOCK_HASH
             if [ $current_hash != $MASTER_COMPOSER_LOCK_HASH ]; then 
               exit 0
             fi
