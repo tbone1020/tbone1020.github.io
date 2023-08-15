@@ -42,7 +42,7 @@ jobs:
             current_major="$(jq '.version | split(".")[0]' package.json)"
             master_major=$(cut -d '.' -f 1 <<<"$MASTER_PACKAGE_VERSION")
             echo $current_major
-            echo $master_major
+            echo "$master_major"
             if [ $current_major <= $master_major ]; then
               echo "Invalid version"
               exit 1
