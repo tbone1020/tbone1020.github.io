@@ -39,14 +39,20 @@ jobs:
       - name: Compare the current versions with the masters versions
         run: |
           if [ -f package.json ]; then
-            current_major="$(jq '.version | split(".")[0]' package.json)"
-            master_major=$(cut -d '.' -f 1 <<<"$MASTER_PACKAGE_VERSION")
-            echo $current_major
-            echo $master_major
-            if [ $current_major -lt $master_major ] || [ $current_major -eq $master_major ]; then
-              echo "Invalid version"
-              exit 1
-            else 
-              echo "good to go"
-            fi 
+            packageVersion="$(jq -r '.version | split(".") | join("") | tonumber' package.json)"
+            if [ $packageVersion <= $masterPackageVersion ]; then 
+              exit 0
+            fi
+          fi
+          if [ -f composer.json ]; then
+            composerVersion="$(jq -r '.version | split(".") | join("") | tonumber' composer.json)"
+            if [ $composerVersion <= $masterComposerVersion ]; then 
+              exit 0
+            fi
+          fi
+          if [ -f composer.lock ]; then
+            composerLockHash="$(jq -r '."content-hash"' composer.lock)"
+            if [ "$masterComposerLockHash" == "$composerLockHash" ]; then
+              exit 0
+            fi
           fi
