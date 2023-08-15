@@ -123,7 +123,7 @@ jobs:
               exit 0
             fi
 
-            echo "composer.lock's file needs to be updated"
+            echo "composer.lock's hash needs to be updated"
             exit 1
           fi
           
