@@ -1,5 +1,5 @@
 # Check if the versions were updated
-# and stop the deployment if they weren't
+# and stop the deployment if not
 name: check-for-updated-versions
 
 on: 
