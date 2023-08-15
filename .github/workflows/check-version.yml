@@ -1,17 +1,12 @@
 # Check if the correct versions were 
-# updated and stop the deployment if not
+# updated and stop the deployment if they weren't
 name: check-for-updated-versions
 
 on: 
   pull_request:
     branches:
       - master
-# MASTER_PACKAGE_VERSION=1.2.3; 
-# [[ $(cut -d'.' -f1 <<<$MASTER_PACKAGE_VERSION) -lt $(jq -r '.version' ./package.json | cut -d'.' -f1) ]]
-# | split(".") | join("") | tonumber
-# test="$(jq -r '.version' ./package.json)"; echo $test
-# [[ 5 -lt 3 || 15 -lt 10 || 0 -gt 5 ]] && echo 'hello' || echo 'No' 
-# Start with incoming one
+
 jobs:
   check-package-version:
     runs-on: ubuntu-latest
@@ -36,7 +31,7 @@ jobs:
         uses: actions/checkout@v3
         with:
           repository: ${{ github.repository }}
-      - name: Compare package.json versions
+      - name: Check package.json versions
         run: |
           if [ -f package.json ]; then
             current_major="$(jq '.version | split(".")[0]|tonumber' package.json)"
@@ -75,7 +70,7 @@ jobs:
             echo "Package.json needs to be updated"
             exit 1
           fi
-      - name: Compare composer.json versions
+      - name: Check composer.json versions
         run: |
           if [ -f composer.json ]; then
             current_major="$(jq '.version | split(".")[0]|tonumber' composer.json)"
@@ -114,7 +109,7 @@ jobs:
             echo "Composer.json needs to be updated"
             exit 1
           fi
-      - name: Compare composer.lock's hash
+      - name: Check composer.lock's hash
         run: |
           if [ -f composer.lock ]; then
             current_hash="$(jq '."content-hash"' composer.lock)"
