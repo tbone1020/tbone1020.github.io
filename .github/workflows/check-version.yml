@@ -47,6 +47,6 @@ jobs:
               echo "Invalid version"
               exit 1
             else 
-              echo "We're good"
+              echo "good to go"
             fi 
           fi
