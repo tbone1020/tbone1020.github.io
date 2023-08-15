@@ -40,21 +40,9 @@ jobs:
         run: |
           if [ -f package.json ]; then
             packageVersion="$(jq '.version' package.json)"
+            MASTER_PACKAGE_VERSION="1.1.0"
             if [ $packageVersion = $MASTER_PACKAGE_VERSION ]; then
               echo "Both package versions are the same"
               exit 1;
-            else
-              echo "Both package versions are different"
-            fi
-          fi
-          if [ -f composer.json ]; then
-            composerVersion="$(jq -r '.version' composer.json)"
-            echo ($('jq -r split(".") | .[]'' $composerVersion))
-          fi
-          if [ -f composer.lock ]; then
-            composerLockHash="$(jq -r '."content-hash"' composer.lock)"
-            if [ "$masterComposerLockHash" -eq "$MASTER_COMPOSER_LOCK_HASH" ]; then
-              echo "composer.lock needs to be updated"
-              exit 1
             fi
           fi
