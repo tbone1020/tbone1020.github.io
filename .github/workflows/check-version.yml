@@ -118,9 +118,11 @@ jobs:
         run: |
           if [ -f composer.lock ]; then
             current_hash="$(jq '."content-hash"' composer.lock)"
-            if [ $current_hash = $MASTER_COMPOSER_LOCK_HASH ]; then 
-              echo "composer.lock's file needs to be updated"
-              exit 1
+            if [ $current_hash != $MASTER_COMPOSER_LOCK_HASH ]; then 
+              exit 0
             fi
+
+            echo "composer.lock's file needs to be updated"
+            exit 0
           fi
           
