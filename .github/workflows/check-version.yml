@@ -24,7 +24,7 @@ jobs:
       - name: Get the master package versions and hash
         run: |
           if [ -f package.json ]; then
-            echo MASTER_PACKAGE_VERSION="$(jq '.version' package.json)" >> "$GITHUB_ENV"
+            echo MASTER_PACKAGE_VERSION="$(jq -r '.version' package.json)" >> "$GITHUB_ENV"
           fi
           if [ -f composer.json ]; then
             echo MASTER_COMPOSER_VERSION="$(jq -r '.version' composer.json)" >> "$GITHUB_ENV"
