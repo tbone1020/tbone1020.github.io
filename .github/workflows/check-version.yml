@@ -44,7 +44,7 @@ jobs:
             echo $current_major
             echo $master_major
             if [ $current_major -lt $master_major ]; then
-              echo "Package version is below the master version"
+              echo "Package major is below the master version"
               exit 1
             fi 
 
@@ -57,7 +57,7 @@ jobs:
             echo $current_minor
             echo $master_minor
             if [ $current_minor -lt $master_minor ]; then
-              echo "Package version is below the master version"
+              echo "Package minor is below the master version"
               exit 1
             fi 
 
@@ -70,7 +70,7 @@ jobs:
             echo $current_patch
             echo $master_patch
             if [ $current_minor -lt $current_patch ]; then
-              echo "Package version is below the master version"
+              echo "Package patch is below the master version"
               exit 1
             fi 
 
