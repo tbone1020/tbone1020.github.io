@@ -119,7 +119,6 @@ jobs:
           if [ -f composer.lock ]; then
             current_hash="$(jq '."content-hash"' composer.lock)"
             if [ $current_hash != $MASTER_COMPOSER_LOCK_HASH ]; then 
-              echo "Good to go"
               exit 0
             fi
 
