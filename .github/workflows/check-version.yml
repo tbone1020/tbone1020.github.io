@@ -89,10 +89,10 @@ jobs:
               exit 0
             fi 
 
-            current_minor="$(jq '.version | split(".")[1]|tonumber' package.json)"
+            current_minor="$(jq '.version | split(".")[1]|tonumber' composer.json)"
             master_minor=$(cut -d '.' -f 2 <<<"$MASTER_COMPOSER_VERSION")
             if [ $current_minor -lt $master_minor ]; then
-              echo "Package minor is below the master version"
+              echo "Composer minor is below the master version"
               exit 1
             fi 
 
@@ -100,10 +100,10 @@ jobs:
               exit 0
             fi 
 
-            current_patch="$(jq '.version | split(".")[2]|tonumber' package.json)"
+            current_patch="$(jq '.version | split(".")[2]|tonumber' composer.json)"
             master_patch=$(cut -d '.' -f 3 <<<"$MASTER_COMPOSER_VERSION")
             if [ $current_patch -lt $master_patch ]; then
-              echo "Package patch is below the master version"
+              echo "Composer patch is below the master version"
               exit 1
             fi 
 
@@ -111,6 +111,6 @@ jobs:
               exit 0
             fi
 
-            echo "Package version needs to be updated"
+            echo "Composer version needs to be updated"
             exit 1
           fi
