@@ -63,12 +63,12 @@ jobs:
 
             current_patch="$(jq '.version | split(".")[2]|tonumber' package.json)"
             master_patch=$(cut -d '.' -f 3 <<<"$MASTER_PACKAGE_VERSION")
-            if [ $current_minor -lt $current_patch ]; then
+            if [ $current_patch -lt $current_patch ]; then
               echo "Package patch is below the master version"
               exit 1
             fi 
 
-            if [ $current_minor -gt $master_patch ]; then
+            if [ $current_patch -gt $master_patch ]; then
               exit 0
             fi
 
