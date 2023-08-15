@@ -42,7 +42,7 @@ jobs:
             current_major="$(jq '.version | split(".")[0]|tonumber' package.json)"
             master_major=$(cut -d '.' -f 1 <<<"$MASTER_PACKAGE_VERSION")
             if [ $current_major -lt $master_major ]; then
-              echo "Package major is below the master version"
+              echo "package's major is below the master version"
               exit 1
             fi 
 
@@ -53,7 +53,7 @@ jobs:
             current_minor="$(jq '.version | split(".")[1]|tonumber' package.json)"
             master_minor=$(cut -d '.' -f 2 <<<"$MASTER_PACKAGE_VERSION")
             if [ $current_minor -lt $master_minor ]; then
-              echo "Package minor is below the master version"
+              echo "package's minor is below the master version"
               exit 1
             fi 
 
@@ -64,7 +64,7 @@ jobs:
             current_patch="$(jq '.version | split(".")[2]|tonumber' package.json)"
             master_patch=$(cut -d '.' -f 3 <<<"$MASTER_PACKAGE_VERSION")
             if [ $current_patch -lt $master_patch ]; then
-              echo "Package patch is below the master version"
+              echo "package's patch is below the master version"
               exit 1
             fi 
 
@@ -72,7 +72,7 @@ jobs:
               exit 0
             fi
 
-            echo "Package version needs to be updated"
+            echo "Package.json needs to be updated"
             exit 1
           fi
       - name: Compare composer.json's versions
@@ -81,7 +81,7 @@ jobs:
             current_major="$(jq '.version | split(".")[0]|tonumber' composer.json)"
             master_major=$(cut -d '.' -f 1 <<<"$MASTER_COMPOSER_VERSION")
             if [ $current_major -lt $master_major ]; then
-              echo "Composer major is below the master version"
+              echo "composer's major is below the master version"
               exit 1
             fi 
 
@@ -92,7 +92,7 @@ jobs:
             current_minor="$(jq '.version | split(".")[1]|tonumber' composer.json)"
             master_minor=$(cut -d '.' -f 2 <<<"$MASTER_COMPOSER_VERSION")
             if [ $current_minor -lt $master_minor ]; then
-              echo "Composer minor is below the master version"
+              echo "composer's minor is below the master version"
               exit 1
             fi 
 
@@ -103,7 +103,7 @@ jobs:
             current_patch="$(jq '.version | split(".")[2]|tonumber' composer.json)"
             master_patch=$(cut -d '.' -f 3 <<<"$MASTER_COMPOSER_VERSION")
             if [ $current_patch -lt $master_patch ]; then
-              echo "Composer patch is below the master version"
+              echo "composer's patch is below the master version"
               exit 1
             fi 
 
@@ -111,6 +111,16 @@ jobs:
               exit 0
             fi
 
-            echo "Composer version needs to be updated"
+            echo "Composer.json needs to be updated"
             exit 1
           fi
+      - name: Compare composer.lock's hash
+        run: |
+          if [ -f composer.lock ]; then
+            current_hash="$(jq '."content-hash"' composer.lock)"
+            if [$current_hash -eq $MASTER_COMPOSER_LOCK_HASH ]; then 
+              echo "composer.lock's file needs to be updated"
+              exit 1
+            fi
+          fi
+          
