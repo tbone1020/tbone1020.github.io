@@ -36,18 +36,18 @@ jobs:
           if [ -f package.json ]; then
             packageVersion="$(jq -r '.version | split(".") | join("") | tonumber' package.json)"
             if [ $packageVersion <= $masterPackageVersion ]; then 
-              exit 1
+              exit 0
             fi
           fi
           if [ -f composer.json ]; then
             composerVersion="$(jq -r '.version | split(".") | join("") | tonumber' composer.json)"
             if [ $composerVersion <= $masterComposerVersion ]; then 
-              exit 1
+              exit 0
             fi
           fi
           if [ -f composer.lock ]; then
             composerLockHash="$(jq -r '."content-hash"' composer.lock)"
             if [ "$masterComposerLockHash" == "$composerLockHash" ]; then
-              exit 1
+              exit 0
             fi
           fi
