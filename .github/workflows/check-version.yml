@@ -1,5 +1,5 @@
-# Check if the correct versions were 
-# updated and stop the deployment if they weren't
+# Check if the versions were updated
+# and stop the deployment if they weren't
 name: check-for-updated-versions
 
 on: 
@@ -8,7 +8,7 @@ on:
       - master
 
 jobs:
-  check-package-version:
+  check-version:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout the master repo
