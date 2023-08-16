@@ -55,27 +55,27 @@ jobs:
               continue
             fi
 
-            if [ "$(jq -r '.version' "$file")" = "$MASTER_VERSION" ]; then
+            if [ "$(jq -r '.version' "$file")" = $MASTER_VERSION ]; then
               echo "The version in $file needs to be updated"
               exit 1
             fi
 
             branch_major="$(jq -r '.version | split(".")[0] | tonumber' "$file")"
-            master_major="$(jq -r '.version | split(".")[0] | tonumber' "$MASTER_VERSION")"
+            master_major=$(cut -d '.' -f 1 <<<"$MASTER_COMPOSER_VERSION")
             if [ $branch_major -gt $master_major ]; then
-              exit 0
+                exit 0
             fi
-
+        
             branch_minor="$(jq -r '.version | split(".")[1] | tonumber' "$file")"
-            master_minor="$(jq -r '.version | split(".")[1] | tonumber' "$MASTER_VERSION")"
+            master_minor=$(cut -d '.' -f 2 <<<"$MASTER_COMPOSER_VERSION")
             if [ $branch_minor -gt $master_minor ]; then
-              exit 0
+                exit 0
             fi
-
+        
             branch_patch="$(jq -r '.version | split(".")[2] | tonumber' "$file")"
-            master_patch="$(jq -r '.version | split(".")[2] | tonumber' "$MASTER_VERSION")"
+            master_patch=$(cut -d '.' -f 3 <<<"$MASTER_COMPOSER_VERSION")
             if [ $branch_patch -gt $master_patch ]; then
-              exit 0
+                exit 0
             fi
 
             exit 1
