@@ -23,7 +23,7 @@ jobs:
               if ! [ -f "$file" ]; then
                 continue
               fi
-              
+              echo "The file is $file"
               if [ -n "$version" ] && [ "$version" != "$(jq -r '.version' "$file")" ]; then 
                 echo "The version in $file does not match with the other versions"
                 exit 1
