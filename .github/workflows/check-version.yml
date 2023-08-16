@@ -11,12 +11,12 @@ jobs:
   compare-versions:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout the master repo
+      - name: Checkout the master branch
         uses: actions/checkout@v3
         with:
           repository: ${{ github.repository }}
           ref: master
-      - name: Get the master package version
+      - name: Get master's package, package-lock, and composer versions
         run: |
           version=
             for file in ./package.json ./package-lock.json composer.json; do
@@ -39,12 +39,12 @@ jobs:
 
             echo MASTER_VERSION="$(version)" >>"$GITHUB_ENV"
       
-      - name: Get the master composer.lock hash-content
+      - name: Get master's composer.lock hash-content
         run: |
           if [ -f composer.lock ]; then
             echo MASTER_COMPOSER_HASH="$(jq -r '."content-hash"' composer.lock)" >>"$GITHUB_ENV"
           fi
-      - name: Checkout the current repo
+      - name: Checkout the current branch
         uses: actions/checkout@v3
         with:
           repository: ${{ github.repository }}
