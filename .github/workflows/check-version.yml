@@ -23,7 +23,7 @@ jobs:
               if ! [ -f "$file" ]; then
                 continue
               fi
-              echo "The file is $file"
+
               if [ -n "$version" ] && [ "$version" != "$(jq -r '.version' "$file")" ]; then 
                 echo "The version in $file does not match with the other versions"
                 exit 1
@@ -51,33 +51,7 @@ jobs:
       - name: Check versions in package, package-lock, and composer
         run: |
           for file in package.json package-lock.json composer.json; do
-            if ! [ -f $file ]; then
-              continue
-            fi
-
-            if [ "$(jq -r '.version' "$file")" = $MASTER_VERSION ]; then
-              echo "The version in $file needs to be updated"
-              exit 1
-            fi
-
-            branch_major="$(jq -r '.version | split(".")[0] | tonumber' "$file")"
-            master_major="$(jq -r '.version | split(".")[0] | tonumber' "$MASTER_VERSION")"
-            if [ $branch_major -gt $master_major ]; then
-              exit 0
-            fi
-
-            branch_minor="$(jq -r '.version | split(".")[1] | tonumber' "$file")"
-            master_minor="$(jq -r '.version | split(".")[1] | tonumber' "$MASTER_VERSION")"
-            if [ $branch_minor -gt $master_minor ]; then
-              exit 0
-            fi
-
-            branch_patch="$(jq -r '.version | split(".")[2] | tonumber' "$file")"
-            master_patch="$(jq -r '.version | split(".")[2] | tonumber' "$MASTER_VERSION")"
-            if [ $branch_patch -gt $master_patch ]; then
-              exit 0
-            fi
-
+           
             exit 1
           done
       - name: Check composer.lock's hash
