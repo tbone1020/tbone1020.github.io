@@ -37,7 +37,7 @@ jobs:
               exit 1
             fi
 
-            echo MASTER_VERSION="$($version)" >>"$GITHUB_ENV"
+            echo MASTER_VERSION="$version" >> "$GITHUB_ENV"
       
       - name: Get master's composer.lock hash-content
         run: |
