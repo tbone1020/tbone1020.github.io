@@ -33,7 +33,7 @@ jobs:
             done
 
             if [ -z "$version" ]; then
-              echo 'no versions were found on the master branch'
+              echo "no versions were found on the master branch"
               exit 1
             fi
 
@@ -55,7 +55,7 @@ jobs:
               continue
             fi
 
-            if [ "$(jq -r '.version' "$file")" = $MASTER_VERSION ]; then
+            if [ "$(jq -r '.version' "$file")" = "$MASTER_VERSION" ]; then
               echo "The version in $file needs to be updated"
               exit 1
             fi
