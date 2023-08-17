@@ -41,7 +41,7 @@ jobs:
       
       - name: Get master's composer.lock hash-content
         run: |
-          if [ -f composer.lock then
+          if [ -f composer.lock ]; then
             echo MASTER_COMPOSER_HASH="$(jq -r '."content-hash"' composer.lock)" >>"$GITHUB_ENV"
           fi
       - name: Checkout the current branch
