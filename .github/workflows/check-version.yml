@@ -84,9 +84,7 @@ jobs:
       - name: Check composer.lock's hash
         run: |
           if [ -f composer.lock ]; then
-            current_hash="$(jq '."content-hash"' composer.lock)"
-            echo "$current_hash"
-            echo "$MASTER_COMPOSER_HASH"
+            current_hash="$(jq -r '."content-hash"' composer.lock)"
             if [ $current_hash != $MASTER_COMPOSER_HASH ]; then 
               exit 0
             fi
