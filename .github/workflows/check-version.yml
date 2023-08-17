@@ -41,7 +41,7 @@ jobs:
       
       - name: Get master's composer.lock hash-content
         run: |
-          if [ -f composer.lock ]; then
+          if [ -f composer.lock then
             echo MASTER_COMPOSER_HASH="$(jq -r '."content-hash"' composer.lock)" >>"$GITHUB_ENV"
           fi
       - name: Checkout the current branch
@@ -55,7 +55,7 @@ jobs:
               continue
             fi
 
-            if [ "$(jq -r '.version' "$file")" = $MASTER_VERSION ]; then
+            if [ "$(jq -r '.version' "$file")" = "$MASTER_VERSION" ]; then
               echo "The version in $file needs to be updated"
               exit 1
             fi
