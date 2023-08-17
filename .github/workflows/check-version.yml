@@ -54,10 +54,8 @@ jobs:
             if ! [ -f "$file" ]; then
               continue
             fi
-            
-            echo "$(jq -r '.version' "$file")"
-            echo "$MASTER_VERSION"
-            if [ "$(jq -r '.version' "$file")" = "$MASTER_VERSION" ]; then
+
+            if [ "$(jq -r '.version' "$file")" -eq "$MASTER_VERSION" ]; then
               echo "The version in $file needs to be updated"
               exit 1
             fi
