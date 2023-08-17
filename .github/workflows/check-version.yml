@@ -75,13 +75,13 @@ jobs:
             exit 0
           fi
       
-          branch_minor=$(cut -d '.' -f 1 <<<"$branch_version")
+          branch_minor=$(cut -d '.' -f 2 <<<"$branch_version")
           master_minor=$(cut -d '.' -f 2 <<<"$MASTER_VERSION")
           if [ $branch_minor -gt $master_minor ]; then
             exit 0
           fi
       
-          branch_patch=$(cut -d '.' -f 1 <<<"$branch_version")
+          branch_patch=$(cut -d '.' -f 3 <<<"$branch_version")
           master_patch=$(cut -d '.' -f 3 <<<"$MASTER_VERSION")
           if [ $branch_patch -gt $master_patch ]; then
              exit 0
