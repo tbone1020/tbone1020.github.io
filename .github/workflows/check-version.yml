@@ -38,12 +38,8 @@ jobs:
           fi
 
           echo MASTER_VERSION="$version" >> "$GITHUB_ENV"
-      
-      - name: Get master's composer.lock hash-content
-        run: |
-          if [ -f composer.lock ]; then
-            echo MASTER_COMPOSER_HASH="$(jq -r '."content-hash"' composer.lock)" >>"$GITHUB_ENV"
-          fi
+          echo MASTER_COMPOSER_HASH="$(jq -r '."content-hash"' composer.lock 2>/dev/null)" >>"$GITHUB_ENV"
+
       - name: Checkout the current branch
         uses: actions/checkout@v3
         with:
@@ -64,7 +60,7 @@ jobs:
             branch_version="$(jq -r '.version' "$file")"
           done
 
-          if [ "$branch_version" -eq "$MASTER_VERSION" ]; then
+          if [ "$branch_version" == "$MASTER_VERSION" ]; then
             echo "The version in $file needs to be updated"
             exit 1
           fi
@@ -89,15 +85,6 @@ jobs:
 
           echo "No versions were updated"
           exit 1
-      - name: Check composer.lock's hash
-        run: |
-          if [ -f composer.lock ]; then
-            current_hash="$(jq -r '."content-hash"' composer.lock)"
-            if [ $current_hash != $MASTER_COMPOSER_HASH ]; then 
-              exit 0
-            fi
-
-            echo "composer.lock's hash needs to be updated"
-            exit 1
-          fi
+          
+          [ -n $MASTER_COMPOSER_HASH ] && [ "$(jq -r '."content-hash"' composer.lock 2>/dev/null)" = $MASTER_COMPOSER_HASH ] && exit 1
           
