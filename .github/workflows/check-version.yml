@@ -62,34 +62,31 @@ jobs:
 
             branch_major="$(jq -r '.version | split(".")[0] | tonumber' "$file")"
             master_major=$(cut -d '.' -f 1 <<<"$MASTER_VERSION")
-            echo "$branch_major"
-            echo "$master_major"
             if [ $branch_major -gt $master_major ]; then
                 exit 0
             fi
         
             branch_minor="$(jq -r '.version | split(".")[1] | tonumber' "$file")"
             master_minor=$(cut -d '.' -f 2 <<<"$MASTER_VERSION")
-            echo "$branch_minor"
-            echo "$master_minor"
             if [ $branch_minor -gt $master_minor ]; then
                 exit 0
             fi
         
             branch_patch="$(jq -r '.version | split(".")[2] | tonumber' "$file")"
             master_patch=$(cut -d '.' -f 3 <<<"$MASTER_VERSION")
-            echo "$branch_patch"
-            echo "$master_patch"
             if [ $branch_patch -gt $master_patch ]; then
                 exit 0
             fi
 
+            echo "No versions were updated"
             exit 1
           done
       - name: Check composer.lock's hash
         run: |
           if [ -f composer.lock ]; then
             current_hash="$(jq '."content-hash"' composer.lock)"
+            echo "$current_hash"
+            echo "$MASTER_COMPOSER_HASH"
             if [ $current_hash != $MASTER_COMPOSER_HASH ]; then 
               exit 0
             fi
