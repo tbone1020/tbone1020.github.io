@@ -19,25 +19,25 @@ jobs:
       - name: Get master's package, package-lock, and composer versions
         run: |
           version=
-            for file in package.json package-lock.json composer.json; do
-              if ! [ -f "$file" ]; then
-                continue
-              fi
+          for file in package.json package-lock.json composer.json; do
+            if ! [ -f "$file" ]; then
+              continue
+            fi
 
-              if [ -n "$version" ] && [ "$version" != "$(jq -r '.version' "$file")" ]; then 
-                echo "The version in $file does not match with the other versions"
-                exit 1
-              fi
-
-              version="$(jq -r '.version' "$file")"
-            done
-
-            if [ -z "$version" ]; then
-              echo "no versions were found on the master branch"
+            if [ -n "$version" ] && [ "$version" != "$(jq -r '.version' "$file")" ]; then 
+              echo "The version in $file does not match with the other versions"
               exit 1
             fi
 
-            echo MASTER_VERSION="$version" >> "$GITHUB_ENV"
+            version="$(jq -r '.version' "$file")"
+          done
+
+          if [ -z "$version" ]; then
+            echo "no versions were found on the master branch"
+            exit 1
+          fi
+
+          echo MASTER_VERSION="$version" >> "$GITHUB_ENV"
       
       - name: Get master's composer.lock hash-content
         run: |
@@ -50,37 +50,45 @@ jobs:
           repository: ${{ github.repository }}
       - name: Check versions in package, package-lock, and composer
         run: |
+          branch_version=
           for file in package.json package-lock.json composer.json; do
             if ! [ -f "$file" ]; then
               continue
             fi
 
-            if [ "$(jq -r '.version' "$file")" -eq "$MASTER_VERSION" ]; then
-              echo "The version in $file needs to be updated"
+            if [ -n "$branch_version" ] && [ "$branch_version" != "$(jq -r '.version' "$file")" ]; then 
+              echo "The version in $file does not match with the other versions"
               exit 1
             fi
 
-            branch_major="$(jq -r '.version | split(".")[0] | tonumber' "$file")"
-            master_major=$(cut -d '.' -f 1 <<<"$MASTER_VERSION")
-            if [ $branch_major -gt $master_major ]; then
-                exit 0
-            fi
-        
-            branch_minor="$(jq -r '.version | split(".")[1] | tonumber' "$file")"
-            master_minor=$(cut -d '.' -f 2 <<<"$MASTER_VERSION")
-            if [ $branch_minor -gt $master_minor ]; then
-                exit 0
-            fi
-        
-            branch_patch="$(jq -r '.version | split(".")[2] | tonumber' "$file")"
-            master_patch=$(cut -d '.' -f 3 <<<"$MASTER_VERSION")
-            if [ $branch_patch -gt $master_patch ]; then
-                exit 0
-            fi
-
-            echo "No versions were updated"
-            exit 1
+            branch_version="$(jq -r '.version' "$file")"
           done
+
+          if [ "$branch_version" -eq "$MASTER_VERSION" ]; then
+            echo "The version in $file needs to be updated"
+            exit 1
+          fi
+
+          branch_major=$(cut -d '.' -f 1 <<<"$branch_version")
+          master_major=$(cut -d '.' -f 1 <<<"$MASTER_VERSION")
+          if [ $branch_major -gt $master_major ]; then
+            exit 0
+          fi
+      
+          branch_minor=$(cut -d '.' -f 1 <<<"$branch_version")
+          master_minor=$(cut -d '.' -f 2 <<<"$MASTER_VERSION")
+          if [ $branch_minor -gt $master_minor ]; then
+            exit 0
+          fi
+      
+          branch_patch=$(cut -d '.' -f 1 <<<"$branch_version")
+          master_patch=$(cut -d '.' -f 3 <<<"$MASTER_VERSION")
+          if [ $branch_patch -gt $master_patch ]; then
+             exit 0
+          fi
+
+          echo "No versions were updated"
+          exit 1
       - name: Check composer.lock's hash
         run: |
           if [ -f composer.lock ]; then
